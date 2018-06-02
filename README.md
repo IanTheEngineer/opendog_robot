@@ -15,6 +15,6 @@ $ git clone https://github.com/IanTheEngineer/opendog_robot.git
 $ cd ~/ros_ws/
 $ source /opt/ros/<distro>/setup.bash
 $ catkin_make
-$ source ~/devel/setup.bash
+$ source ~/ros_ws/devel/setup.bash
 $ roslaunch opendog_description test_opendog_description.launch
 ```
