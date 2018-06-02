@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<robot name="leg_mechanism" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="leg_mechanism" params="end side *joint_origin">
+
+   <xacro:property name="reflect" value="1.0" scope="local"/>
+   <xacro:if value="${side == 'right'}">
+     <xacro:property name="reflect" value="-1.0" scope="local"/>
+   </xacro:if>
+
+    <link name="${end}_${side}_leg_mount"/>
+    <joint name="${end}_${side}_leg_mount_joint" type="fixed">
+      <xacro:insert_block name="joint_origin" />
+      <parent link="base_link"/>
+      <child link="${end}_${side}_leg_mount"/>
+    </joint>
+    <joint name="${end}_${side}_hip_mount_joint" type="fixed">
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+      <parent link="${end}_${side}_leg_mount"/>
+      <child link="${end}_${side}_hip"/>
+    </joint>
+    <link name="${end}_${side}_hip">
+      <inertial>
+        <origin rpy="0 0 ${pi*(reflect+1)/2}" xyz="0 0 0"/>
+        <mass value="5.0"/>
+        <inertia ixx="0.01" ixy="0.01" ixz="0.01" iyy="0.01" iyz="0.01" izz="0.01"/>
+      </inertial>
+      <visual>
+        <origin rpy="0 0 ${pi*(reflect+1)/2}" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://opendog_description/meshes/hip.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0 0 ${pi*(reflect+1)/2}" xyz="0 0 0"/>
+        <geometry>
+          <sphere radius="1.0"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${end}_${side}_hip_joint" type="revolute">
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 ${reflect*0.075} 0.0"/>
+      <parent link="${end}_${side}_hip"/>
+      <child link="${end}_${side}_upper_leg"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="80.0" lower="0.0" upper="1.0" velocity="0.5"/>
+      <dynamics damping="10.0" friction="5.0"/>
+    </joint>
+    <link name="${end}_${side}_upper_leg">
+      <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <mass value="5.0"/>
+        <inertia ixx="0.01" ixy="0.01" ixz="0.01" iyy="0.01" iyz="0.01" izz="0.01"/>
+      </inertial>
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+	  <mesh filename="package://opendog_description/meshes/${side}_upper_leg.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <sphere radius="1.0"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${end}_${side}_knee_joint" type="revolute">
+      <origin rpy="0.0 0.0 0.0" xyz="0.09 ${reflect*-0.01} -0.32"/>
+      <parent link="${end}_${side}_upper_leg"/>
+      <child link="${end}_${side}_lower_leg"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="80.0" lower="-1.5" upper="0.0" velocity="0.5"/>
+      <dynamics damping="10.0" friction="5.0"/>
+    </joint>
+    <link name="${end}_${side}_lower_leg">
+      <inertial>
+        <origin rpy="0 0 ${pi*(reflect+1)/2}" xyz="0 0 0"/>
+        <mass value="5.0"/>
+        <inertia ixx="0.01" ixy="0.01" ixz="0.01" iyy="0.01" iyz="0.01" izz="0.01"/>
+      </inertial>
+      <visual>
+        <origin rpy="0 0 ${pi*(reflect+1)/2}" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://opendog_description/meshes/lower_leg.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0 0 ${pi*(reflect+1)/2}" xyz="0 0 0"/>
+        <geometry>
+          <sphere radius="1.0"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${end}_${side}_foot"/>
+    <joint name="${end}_${side}_lower_leg_joint" type="fixed">
+      <origin rpy="0 0 0" xyz="0 0 -0.34"/>
+      <parent link="${end}_${side}_lower_leg"/>
+      <child link="${end}_${side}_foot"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

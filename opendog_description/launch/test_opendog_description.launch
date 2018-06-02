@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+ <!-- This launch file is used to test the URDF and Meshes -->
+<launch>
+ <!-- Load the URDF into the ROS Parameter Server -->
+ <param name="robot_description" command="$(find xacro)/xacro --inorder $(find opendog_description)/urdf/opendog.urdf.xacro" />
+
+ <!-- Run joint state publisher node with gui -->
+ <node pkg="joint_state_publisher" type="joint_state_publisher" name="test_joint_state_publisher" output="screen" args="_use_gui:=true"/>
+
+ <!-- Run robot_state_publisher for tf2 transforms -->
+ <node pkg="robot_state_publisher" type="robot_state_publisher" name="test_robot_state_publisher" output="screen"/>
+
+ <!-- Run rviz to visualize the robot meshes -->
+ <node name="rviz" pkg="rviz" type="rviz" args="-d $(find opendog_description)/config/opendog.rviz" required="true"/>
+</launch>

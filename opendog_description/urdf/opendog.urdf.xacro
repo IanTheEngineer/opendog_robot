@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<robot name="opendog" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- openDog Base URDF -->
+  <link name="base_link"/>
+  <joint name="body_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="body"/>
+  </joint>
+  <link name="body">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.1 0.1 0.1"/>
+      <mass value="5.0"/>
+      <inertia ixx="0.01" ixy="0.01" ixz="0.01" iyy="0.01" iyz="0.01" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://opendog_description/meshes/body.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="1.0"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <xacro:include filename="$(find opendog_description)/urdf/leg_mechanism.xacro" />
+  <xacro:property name="mount_width" value="0.23" scope="local"/>
+  <xacro:property name="mount_length" value="0.5" scope="local"/>
+  <xacro:leg_mechanism end="front" side="right">
+    <origin rpy="0 0 0" xyz="${mount_length/2.0} ${-mount_width/2.0} 0.0"/>
+  </xacro:leg_mechanism>
+  <xacro:leg_mechanism end="front" side="left">
+    <origin rpy="0 0 0" xyz="${mount_length/2.0} ${mount_width/2.0} 0.0"/>
+  </xacro:leg_mechanism>
+  <xacro:leg_mechanism end="rear" side="right">
+    <origin rpy="0 0 0" xyz="${-mount_length/2.0} ${-mount_width/2.0} 0.0"/>
+  </xacro:leg_mechanism>
+  <xacro:leg_mechanism end="rear" side="left">
+    <origin rpy="0 0 0" xyz="${-mount_length/2.0} ${mount_width/2.0} 0.0"/>
+  </xacro:leg_mechanism>
+
+</robot>
