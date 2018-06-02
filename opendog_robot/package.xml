@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>opendog_robot</name>
+  <version>0.0.1</version>
+  <description>The opendog_robot package</description>
+
+  <maintainer email="ian@ianthe.engineer">Ian McMahon</maintainer>
+  <license>Apache 2.0</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>opendog_description</depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>
